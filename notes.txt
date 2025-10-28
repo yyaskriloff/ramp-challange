@@ -9,3 +9,4 @@ value - VALID_CHARACTER
 in general I try to use functions provided by the js runtime because they are faster and more efficient than custom functions.
 in the case of the section and artical check using the mrovided String methods I belive is faster than a regex check
 
+create a recurstion function that returns valid articles. because because there can be multiple nested articles in a section

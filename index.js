@@ -9,7 +9,19 @@ function isValidSection(section) {
   return section;
 }
 
-function isValidArticle(article) {}
+function getValidArticles(articles, validArticles = []) {
+  // break clause
+  if (!articles || articles.length === 0) return validArticles;
+  const article = articles.shift();
+
+  const dataClass = article.getAttribute("data-class");
+  if (!dataClass || !dataClass.endsWith("45"))
+    return getValidArticles(articles, validArticles);
+
+  validArticles.push(article);
+
+  return getValidArticles(articles, validArticles);
+}
 
 function isValidDiv() {}
 
@@ -21,10 +33,17 @@ document.addEventListener("DOMContentLoaded", () => {
       const validSection = isValidSection(section);
       if (!validSection) return;
 
-      const articles = section.querySelectorAll("article");
+      const articles = Array.from(section.querySelectorAll("article"));
       if (articles.length === 0) return;
+
+      const validArticles = getValidArticles(articles);
+      if (validArticles.length === 0) return;
+
+      console.log(validArticles.length);
+
+      return true;
     })
     .filter(Boolean);
 
-  console.log(nodes);
+  console.log(nodes.length);
 });
