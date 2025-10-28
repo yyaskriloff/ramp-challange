@@ -9,6 +9,6 @@ value - VALID_CHARACTER
 in general I try to use functions provided by the js runtime because they are faster and more efficient than custom functions.
 in the case of the section and artical check using the mrovided String methods I belive is faster than a regex check
 
-sunbeam
+sunbeam 🌞
 
 I'm sure theres a better way to do this theres a lot of looping and array creating but i went with the code that was the most easier for me to read and track
