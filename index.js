@@ -1,49 +1,63 @@
+const DIV_TAG_REGEX = /^.*78.*$/;
+
 function isValidSection(section) {
   const dataId = section.getAttribute("data-id");
-  if (!dataId) return false;
-
-  if (!dataId.startsWith("92")) {
-    return false;
-  }
+  if (!dataId || !dataId.startsWith("92")) return false;
 
   return section;
 }
 
-function getValidArticles(articles, validArticles = []) {
-  // break clause
-  if (!articles || articles.length === 0) return validArticles;
-  const article = articles.shift();
-
+function isValidArticle(article) {
   const dataClass = article.getAttribute("data-class");
-  if (!dataClass || !dataClass.endsWith("45"))
-    return getValidArticles(articles, validArticles);
+  if (!dataClass || !dataClass.endsWith("45")) return false;
 
-  validArticles.push(article);
-
-  return getValidArticles(articles, validArticles);
+  return article;
 }
 
-function isValidDiv() {}
+function isValidDiv(div) {
+  const dataTag = div.getAttribute("data-tag");
+  if (!dataTag || !DIV_TAG_REGEX.test(dataTag)) return false;
 
-function isValidB() {}
+  return div;
+}
+
+function isValidValue(b) {
+  const hasClass = b.classList.contains("ref");
+  const value = b.getAttribute("value");
+  if (!hasClass || !value) return false;
+
+  return value;
+}
+
+function getValueFromSection(section) {
+  const articles = Array.from(section.querySelectorAll("article")).filter(
+    isValidArticle
+  );
+
+  if (articles.length === 0) return [];
+
+  const divs = articles.flatMap((article) =>
+    Array.from(article.querySelectorAll("div")).filter(isValidDiv)
+  );
+  if (divs.length === 0) return [];
+
+  console.log({ divs });
+
+  const values = divs.flatMap((div) =>
+    Array.from(div.querySelectorAll("b"))
+      .map((b) => isValidValue(b))
+      .filter(Boolean)
+  );
+  if (values.length === 0) return [];
+  return values;
+}
 
 document.addEventListener("DOMContentLoaded", () => {
-  const nodes = Array.from(document.querySelectorAll("section"))
-    .map((section) => {
-      const validSection = isValidSection(section);
-      if (!validSection) return;
+  const validSections = Array.from(document.querySelectorAll("section")).filter(
+    (section) => isValidSection(section)
+  );
 
-      const articles = Array.from(section.querySelectorAll("article"));
-      if (articles.length === 0) return;
+  const value = validSections.flatMap(getValueFromSection).join("");
 
-      const validArticles = getValidArticles(articles);
-      if (validArticles.length === 0) return;
-
-      console.log(validArticles.length);
-
-      return true;
-    })
-    .filter(Boolean);
-
-  console.log(nodes.length);
+  console.log(value);
 });
