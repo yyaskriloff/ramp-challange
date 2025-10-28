@@ -1,0 +1,11 @@
+section - data-id - 92*
+article - data-class - *45
+div - data-tag - *78*
+b - class - ref
+value - VALID_CHARACTER
+
+
+
+in general I try to use functions provided by the js runtime because they are faster and more efficient than custom functions.
+in the case of the section and artical check using the mrovided String methods I belive is faster than a regex check
+
