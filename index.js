@@ -41,8 +41,6 @@ function getValueFromSection(section) {
   );
   if (divs.length === 0) return [];
 
-  console.log({ divs });
-
   const values = divs.flatMap((div) =>
     Array.from(div.querySelectorAll("b"))
       .map((b) => isValidValue(b))
